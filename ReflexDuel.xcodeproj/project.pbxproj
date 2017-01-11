@@ -17,6 +17,9 @@
 		4AF98C161E1B5DCC0067C784 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C141E1B5DCC0067C784 /* LaunchScreen.storyboard */; };
 		4AF98C211E1B5DCC0067C784 /* ReflexDuelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C201E1B5DCC0067C784 /* ReflexDuelTests.swift */; };
 		4AF98C2C1E1B5DCC0067C784 /* ReflexDuelUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C2B1E1B5DCC0067C784 /* ReflexDuelUITests.swift */; };
+		4AF98C3A1E1C1CE20067C784 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */; };
+		4AF98C3C1E1C1D180067C784 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */; };
+		4AF98C3E1E1C220F0067C784 /* MSButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C3D1E1C220F0067C784 /* MSButtonNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,9 @@
 		4AF98C271E1B5DCC0067C784 /* ReflexDuelUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReflexDuelUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AF98C2B1E1B5DCC0067C784 /* ReflexDuelUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflexDuelUITests.swift; sourceTree = "<group>"; };
 		4AF98C2D1E1B5DCC0067C784 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
+		4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
+		4AF98C3D1E1C220F0067C784 /* MSButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSButtonNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,8 +110,11 @@
 			isa = PBXGroup;
 			children = (
 				4AF98C051E1B5DCC0067C784 /* AppDelegate.swift */,
-				4AF98C071E1B5DCC0067C784 /* GameScene.sks */,
 				4AF98C091E1B5DCC0067C784 /* Actions.sks */,
+				4AF98C071E1B5DCC0067C784 /* GameScene.sks */,
+				4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */,
+				4AF98C3D1E1C220F0067C784 /* MSButtonNode.swift */,
+				4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */,
 				4AF98C0B1E1B5DCC0067C784 /* GameScene.swift */,
 				4AF98C0D1E1B5DCC0067C784 /* GameViewController.swift */,
 				4AF98C0F1E1B5DCC0067C784 /* Main.storyboard */,
@@ -248,6 +257,7 @@
 				4AF98C081E1B5DCC0067C784 /* GameScene.sks in Resources */,
 				4AF98C131E1B5DCC0067C784 /* Assets.xcassets in Resources */,
 				4AF98C161E1B5DCC0067C784 /* LaunchScreen.storyboard in Resources */,
+				4AF98C3C1E1C1D180067C784 /* MainMenuScene.sks in Resources */,
 				4AF98C0A1E1B5DCC0067C784 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,7 +285,9 @@
 			files = (
 				4AF98C0C1E1B5DCC0067C784 /* GameScene.swift in Sources */,
 				4AF98C0E1E1B5DCC0067C784 /* GameViewController.swift in Sources */,
+				4AF98C3A1E1C1CE20067C784 /* MainMenuScene.swift in Sources */,
 				4AF98C061E1B5DCC0067C784 /* AppDelegate.swift in Sources */,
+				4AF98C3E1E1C220F0067C784 /* MSButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

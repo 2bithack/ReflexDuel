@@ -5,85 +5,172 @@
 //  Created by enzo bot on 1/2/17.
 //  Copyright © 2017 madJOKERstudios. All rights reserved.
 //
-
+import Foundation
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    var initialFightTimer: CFTimeInterval = 0
+    var beginFightTimer: CFTimeInterval = 0
+    var player1Timer: CFTimeInterval = 0
+    var player2Timer: CFTimeInterval = 0
+    let fixedDelta: CFTimeInterval = 1.000/60.000 //60 fps
+    
+    let background = SKSpriteNode(imageNamed: "background")
+    var player1 = SKSpriteNode(imageNamed: "player1")
+    var player2 = SKSpriteNode(imageNamed: "player2")
+    let fightRing = SKSpriteNode(imageNamed: "fightRing")
+    //how do i set msbuttonnode to image asset? it's an skspritenode
+    var readyButton1 = MSButtonNode(imageNamed: "readyButton1")
+    var readyButton2 = MSButtonNode(imageNamed: "readyButton2")
+    
+    var readyButton1Pressed: Bool = false
+    var readyButton2Pressed: Bool = false
+    var player1Tapped: Bool = false
+    var player2Tapped: Bool = false
+    
+    var player1Time: Double = 0.0
+    var player2Time: Double = 0.0
+    
+    var prepareLabel: SKLabelNode!
+    var toLabel: SKLabelNode!
+    var fightLabel: SKLabelNode!
+    
+    var player1TapCount: Int!
+    var player2TapCount: Int!
+    
+    let player1TapArea = SKSpriteNode(imageNamed: "playerTapArea")
+    let player2TapArea = SKSpriteNode(imageNamed: "playerTapArea")
     
     override func didMove(to view: SKView) {
         
-        // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
-        if let label = self.label {
-            label.alpha = 0.0
-            label.run(SKAction.fadeIn(withDuration: 2.0))
-        }
+        physicsWorld.contactDelegate = self
         
-        // Create shape node to use during mouse interaction
-        let w = (self.size.width + self.size.height) * 0.05
-        self.spinnyNode = SKShapeNode.init(rectOf: CGSize.init(width: w, height: w), cornerRadius: w * 0.3)
+        player1.setScale(1)
+        player1.position = (CGPoint(x: self.size.width/2, y: ((self.size.height/2)-(self.size.height/5))))
+        player1.zPosition = 0
+        self.addChild(player1)
+        player2.setScale(1)
+        player2.position = (CGPoint(x: self.size.width/2, y: ((self.size.height/2)+(self.size.height/5))))
+        player2.zPosition = 0
+        self.addChild(player2)
         
-        if let spinnyNode = self.spinnyNode {
-            spinnyNode.lineWidth = 2.5
+        background.size = self.size
+        background.position = CGPoint(x: self.size.width/2, y: size.self.height/2)
+        background.zPosition = -2
+        self.addChild(background)
+        
+        fightRing.setScale(1)
+        fightRing.position = CGPoint(x: self.size.width/2, y: size.self.height/2)
+        fightRing.zPosition = -2
+        self.addChild(fightRing)
+        
+        readyButton1.setScale(1)
+        readyButton1.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.05)
+        readyButton1.zPosition = 1
+        self.addChild(readyButton1)
+        
+        readyButton2.setScale(1)
+        readyButton2.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.95)
+        readyButton2.zPosition = 1
+        self.addChild(readyButton2)
+        
+        player1TapArea.setScale(4)
+        player1TapArea.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.25)
+        player1TapArea.zPosition = -3
+        self.addChild(player1TapArea)
+        
+        player2TapArea.setScale(4)
+        player2TapArea.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.75)
+        player2TapArea.zPosition = -3
+        self.addChild(player2TapArea)
+        
+        readyButton1.selectedHandler = {
             
-            spinnyNode.run(SKAction.repeatForever(SKAction.rotate(byAngle: CGFloat(M_PI), duration: 1)))
-            spinnyNode.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                              SKAction.fadeOut(withDuration: 0.5),
-                                              SKAction.removeFromParent()]))
+            self.readyButton1Pressed = true
+            self.readyButton1.isHidden = true
+            
         }
-    }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
+        readyButton2.selectedHandler = {
+            
+            self.readyButton2Pressed = true
+            self.readyButton2.isHidden = true
+            
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let label = self.label {
-            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
-        }
         
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        if readyButton1Pressed && readyButton2Pressed == true {
+            initialFightTimer = 0
+            if initialFightTimer == 0 {
+                prepareLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+                self.addChild(prepareLabel)
+            }
+            if initialFightTimer == 1 {
+                prepareLabel.removeFromParent()
+                toLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+                self.addChild(toLabel)
+                beginFightTimer = Double(arc4random_uniform(5) + 1)
+            }
+            if beginFightTimer > 0 {
+                toLabel.removeFromParent()
+                beginFightTimer -= fixedDelta
+                if beginFightTimer < 0 {
+                    fightLabel.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+                    self.addChild(fightLabel)
+                    player1Timer = 0
+                    player2Timer = 0
+                }
+                
+            }
+        }
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
+    func tap(sender:UITapGestureRecognizer){
+        
+        var tapLocation: CGPoint = sender.location(in: sender.view)
+        tapLocation = self.convertPoint(fromView: tapLocation)
+        
+        if beginFightTimer < 0 {
+            if player1TapArea.contains(tapLocation){
+                player1Tapped = true
+                player1Time = Double(player1Timer)
+                print(player1Timer)
+            }
+            if player2TapArea.contains(tapLocation){
+                player2Tapped = true
+                player2Time = Double(player2Timer)
+                print(player2Timer)
+            }
+        }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
-    }
-    
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        initialFightTimer += fixedDelta
+        
+        if player1Tapped == false {
+            player1Timer += fixedDelta
+        }
+        
+        if player2Tapped == false {
+            player2Timer += fixedDelta
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if player1Time > 0 && player2Time > 0 {
+            if player1Time > player2Time {
+                //player1WinsLabel and animations
+                print("Player 1 Wins!")
+            } else {
+                //player2WinsLabel and animations
+                print("Player 2 Wins!")
+            }
+        }
     }
 }
