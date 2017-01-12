@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A7C8AF71E284B2D00567C7C /* TapButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C8AF61E284B2D00567C7C /* TapButtonNode.swift */; };
+		4A7C8AF91E284B9400567C7C /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A7C8AF81E284B9400567C7C /* ButtonNode.swift */; };
 		4AF98C061E1B5DCC0067C784 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C051E1B5DCC0067C784 /* AppDelegate.swift */; };
 		4AF98C081E1B5DCC0067C784 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C071E1B5DCC0067C784 /* GameScene.sks */; };
 		4AF98C0A1E1B5DCC0067C784 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C091E1B5DCC0067C784 /* Actions.sks */; };
@@ -19,7 +21,7 @@
 		4AF98C2C1E1B5DCC0067C784 /* ReflexDuelUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C2B1E1B5DCC0067C784 /* ReflexDuelUITests.swift */; };
 		4AF98C3A1E1C1CE20067C784 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */; };
 		4AF98C3C1E1C1D180067C784 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */; };
-		4AF98C3E1E1C220F0067C784 /* MSButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C3D1E1C220F0067C784 /* MSButtonNode.swift */; };
+		4AF98C4A1E280BDF0067C784 /* strikeParticle2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C491E280BDF0067C784 /* strikeParticle2.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4A7C8AF61E284B2D00567C7C /* TapButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TapButtonNode.swift; sourceTree = "<group>"; };
+		4A7C8AF81E284B9400567C7C /* ButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		4AF98C021E1B5DCC0067C784 /* ReflexDuel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReflexDuel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AF98C051E1B5DCC0067C784 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4AF98C071E1B5DCC0067C784 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -58,7 +62,7 @@
 		4AF98C2D1E1B5DCC0067C784 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
-		4AF98C3D1E1C220F0067C784 /* MSButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MSButtonNode.swift; sourceTree = "<group>"; };
+		4AF98C491E280BDF0067C784 /* strikeParticle2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = strikeParticle2.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +93,7 @@
 		4AF98BF91E1B5DCC0067C784 = {
 			isa = PBXGroup;
 			children = (
+				4AF98C491E280BDF0067C784 /* strikeParticle2.sks */,
 				4AF98C041E1B5DCC0067C784 /* ReflexDuel */,
 				4AF98C1F1E1B5DCC0067C784 /* ReflexDuelTests */,
 				4AF98C2A1E1B5DCC0067C784 /* ReflexDuelUITests */,
@@ -113,8 +118,9 @@
 				4AF98C091E1B5DCC0067C784 /* Actions.sks */,
 				4AF98C071E1B5DCC0067C784 /* GameScene.sks */,
 				4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */,
-				4AF98C3D1E1C220F0067C784 /* MSButtonNode.swift */,
 				4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */,
+				4A7C8AF81E284B9400567C7C /* ButtonNode.swift */,
+				4A7C8AF61E284B2D00567C7C /* TapButtonNode.swift */,
 				4AF98C0B1E1B5DCC0067C784 /* GameScene.swift */,
 				4AF98C0D1E1B5DCC0067C784 /* GameViewController.swift */,
 				4AF98C0F1E1B5DCC0067C784 /* Main.storyboard */,
@@ -257,6 +263,7 @@
 				4AF98C081E1B5DCC0067C784 /* GameScene.sks in Resources */,
 				4AF98C131E1B5DCC0067C784 /* Assets.xcassets in Resources */,
 				4AF98C161E1B5DCC0067C784 /* LaunchScreen.storyboard in Resources */,
+				4AF98C4A1E280BDF0067C784 /* strikeParticle2.sks in Resources */,
 				4AF98C3C1E1C1D180067C784 /* MainMenuScene.sks in Resources */,
 				4AF98C0A1E1B5DCC0067C784 /* Actions.sks in Resources */,
 			);
@@ -287,7 +294,8 @@
 				4AF98C0E1E1B5DCC0067C784 /* GameViewController.swift in Sources */,
 				4AF98C3A1E1C1CE20067C784 /* MainMenuScene.swift in Sources */,
 				4AF98C061E1B5DCC0067C784 /* AppDelegate.swift in Sources */,
-				4AF98C3E1E1C220F0067C784 /* MSButtonNode.swift in Sources */,
+				4A7C8AF71E284B2D00567C7C /* TapButtonNode.swift in Sources */,
+				4A7C8AF91E284B9400567C7C /* ButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -538,6 +546,7 @@
 				4AF98C321E1B5DCC0067C784 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4AF98C331E1B5DCC0067C784 /* Build configuration list for PBXNativeTarget "ReflexDuelTests" */ = {
 			isa = XCConfigurationList;
@@ -546,6 +555,7 @@
 				4AF98C351E1B5DCC0067C784 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4AF98C361E1B5DCC0067C784 /* Build configuration list for PBXNativeTarget "ReflexDuelUITests" */ = {
 			isa = XCConfigurationList;
@@ -554,6 +564,7 @@
 				4AF98C381E1B5DCC0067C784 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
