@@ -3,13 +3,13 @@
 import SpriteKit
 
 enum TapButtonNodeState {
-    case Active, Selected, Lit, Hidden
+    case Active, Tapped, Lit, Hidden
 }
 
 class TapButtonNode: SKSpriteNode {
     
     var active: SKTexture!
-    var selected: SKTexture!
+    var tapped: SKTexture!
     var lit: SKTexture!
     var hidden1: SKTexture!
     
@@ -23,13 +23,13 @@ class TapButtonNode: SKSpriteNode {
             /* Enable touch */
             self.isUserInteractionEnabled = true
             
-            /* Visible */
-            self.alpha = 1
+            /* practically inVisible */
+            self.alpha = 0.0000001
             break
-        case .Selected:
-            texture = selected
-            /* Semi transparent */
-            self.alpha = 0.7
+        case .Tapped:
+            texture = tapped
+            /* inVisible */
+            self.alpha = 0
             break
         case .Lit:
             texture = lit
@@ -54,16 +54,16 @@ class TapButtonNode: SKSpriteNode {
         }
     }
     
-    init(activeImageNamed: String, selectedImageNamed: String, hiddenImageNamed: String, litImageNamed: String) {
+    init(activeImageNamed: String, tappedImageNamed: String, hiddenImageNamed: String, litImageNamed: String) {
         active = SKTexture(imageNamed: activeImageNamed)
-        selected = SKTexture(imageNamed: selectedImageNamed)
+        tapped = SKTexture(imageNamed: tappedImageNamed)
         hidden1 = SKTexture(imageNamed: hiddenImageNamed)
         lit = SKTexture(imageNamed: litImageNamed)
         super.init(texture: active, color: UIColor.clear, size: active.size())
         
-        isUserInteractionEnabled = true
+        isUserInteractionEnabled = false
         
-        state = .Active
+        state = .Hidden
         setButtonState()
     }
     
@@ -88,7 +88,7 @@ class TapButtonNode: SKSpriteNode {
     
     // MARK: - Touch handling
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        state = .Selected
+        state = .Tapped
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
