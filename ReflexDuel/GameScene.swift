@@ -25,8 +25,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var tapGesture:UITapGestureRecognizer!
     
     let background = SKSpriteNode(imageNamed: "background")
-    var player1 = SKSpriteNode(imageNamed: "player1")
-    var player2 = SKSpriteNode(imageNamed: "player2")
+    var player1 = SKSpriteNode(imageNamed: "player1a")
+    var player2 = SKSpriteNode(imageNamed: "player2a")
     let fightRing = SKSpriteNode(imageNamed: "fightRing")
 
     let readyButton1 = ButtonNode(activeImageNamed: "readyButton1", selectedImageNamed: "readyButton1", hiddenImageNamed: "readyButton1", litImageNamed: "readyButton1")
@@ -48,8 +48,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var tappedTime: Double = 0.0
     var totalWait: Double = 0.0
     
-    var player1TimeLabelNode: SKLabelNode!
-    var player2TimeLabelNode: SKLabelNode!
+    var player1TimeLabelNode = SKLabelNode()
+    var player2TimeLabelNode = SKLabelNode()
     var timeLabel: String!
     
     let prepareLabel = SKSpriteNode(imageNamed: "prepareLabel")
@@ -57,6 +57,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let fightLabel = SKSpriteNode(imageNamed: "fightLabel")
     let youWinLabel = SKSpriteNode(imageNamed: "youWinLabel")
     let youLoseLabel = SKSpriteNode(imageNamed: "youLoseLabel")
+    
+    let wait = SKAction.wait(forDuration: 0.2)
     
     var player1TapCount: Int = 0
     var player2TapCount: Int = 0
@@ -122,6 +124,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player2TapArea.zPosition = 3
         self.addChild(player2TapArea)
         
+
+        
         readyButton1.selectedHandler = {
             self.readyButton1Pressed = true
             self.readyButton1.isHidden = true
@@ -146,17 +150,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if self.gameState == .Strike {
                 if self.fightStart == true {
                     self.player1Time = (self.tappedTime - self.totalWait - 1)
+                    self.player1Strike()
+                    
+                    self.player1TimeLabelNode.fontName = "Roman"
+                    self.player1TimeLabelNode.fontSize = 20
+                    self.player1TimeLabelNode.position = CGPoint(x: 0, y: self.size.height * 0.2)
+                    self.player1TimeLabelNode.zPosition = 2
+                    self.player1TimeLabelNode.isHidden = true
+                    self.addChild(self.player1TimeLabelNode)
+                    self.player1TimeLabelNode.text = "Player1: \(String(self.player1Time))"
                     
                     self.fightLabel.removeFromParent()
                     self.player1HasTime = true
                 } else {
                     //player1 false start
-                    self.player1Time = 2
-                    self.player1HasTime = true
+                    self.player1Time = 10
                     print("player1 false start")
                 }
             }
-            if self.player1HasTime == true && self.player2HasTime == true || self.player1Time >= 3 {
+            if self.player1HasTime == true && self.player2HasTime == true || self.player1Time >= 10 {
                 self.round1Winner()
             }
             print("Player 1 time:", self.player1Time)
@@ -169,16 +181,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if self.gameState == .Strike {
                 if self.fightStart == true {
                     self.player2Time = (self.tappedTime - self.totalWait - 1)
+                    self.player2Strike()
+                    
+                    self.player2TimeLabelNode.fontName = "Roman"
+                    self.player2TimeLabelNode.fontSize = 20
+                    self.player2TimeLabelNode.position = CGPoint(x: 0, y: self.size.height * -0.2)
+                    self.player2TimeLabelNode.zPosition = 2
+                    self.player2TimeLabelNode.isHidden = true
+                    self.addChild(self.player2TimeLabelNode)
+                    self.player2TimeLabelNode.text = "Player2: \(String(self.player2Time))"
+                    
                     self.fightLabel.removeFromParent()
                     self.player2HasTime = true
                 } else {
                     //player2 false start
-                    self.player2Time = 2
-                    self.player2HasTime = true
+                    self.player2Time = 10
+                    self.player2TimeLabelNode.text = String(self.player2Time)
+                    
                     print("player2 false start")
                 }
             }
-            if self.player1HasTime == true && self.player2HasTime == true || self.player2Time >= 3 {
+            if self.player1HasTime == true && self.player2HasTime == true || self.player2Time >= 10 {
                 self.round1Winner()
             }
             print("Player 2 time:", self.player2Time)
@@ -195,6 +218,54 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func randomTime(range: Int) -> CGFloat {
         let rInt = Int(arc4random() % UInt32(range * 1000))
         return CGFloat(rInt) / 1000
+    }
+    
+    func player1Strike(){
+        let s1 = SKTexture(imageNamed: "player1b")
+        let s2 = SKTexture(imageNamed: "player1c")
+        let s3 = SKTexture(imageNamed: "player1d")
+        let s4 = SKTexture(imageNamed: "player1e")
+        
+        let textures = [s1, s2, s3, s4]
+        
+        let strikeAnimation = SKAction.animate(with: textures, timePerFrame: 0.05, resize: true, restore: false)
+        self.player1.run(strikeAnimation)
+    }
+    
+    func player2Strike(){
+        let s1 = SKTexture(imageNamed: "player2b")
+        let s2 = SKTexture(imageNamed: "player2c")
+        let s3 = SKTexture(imageNamed: "player2d")
+        let s4 = SKTexture(imageNamed: "player2e")
+        
+        let textures = [s1, s2, s3, s4]
+        
+        let strikeAnimation = SKAction.animate(with: textures, timePerFrame: 0.05, resize: true, restore: false)
+        self.player2.run(strikeAnimation)
+    }
+    
+    func player1Wins(){
+        let t1 = SKTexture(imageNamed: "player2f")
+        let t2 = SKTexture(imageNamed: "player2g")
+        let t3 = SKTexture(imageNamed: "player2h")
+        
+        let textures = [t1, t2, t3]
+        
+        let bleedAnimation = SKAction.animate(with: textures, timePerFrame: 0.4, resize: true, restore: false)
+        self.player2.run(bleedAnimation)
+    }
+    
+    func player2Wins(){
+        
+        let t1 = SKTexture(imageNamed: "player1f")
+        let t2 = SKTexture(imageNamed: "player1g")
+        let t3 = SKTexture(imageNamed: "player1h")
+        
+        let textures = [t1, t2, t3]
+        
+        let bleedAnimation = SKAction.animate(with: textures, timePerFrame: 0.4, resize: true, restore: false)
+        self.player1.run(bleedAnimation)
+
     }
     
     func fightCountdown() {
@@ -236,8 +307,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.fightLabel.setScale(2.5)
             self.addChild(self.fightLabel)
             self.fightStart = true
-//            self.player2Timer = 0
-//            self.player1Timer = 0
+
             print("Timers Enabled")
         }
         let countdown = SKAction.sequence([wait1, prep, wait2, to, wait3, fight])
@@ -253,9 +323,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             youWinLabel.setScale(2)
             youWinLabel.position = CGPoint(x: 0, y: (self.size.height * -0.35))
             youWinLabel.zPosition = 1
-            youLoseLabel.setScale(-2)
+            youLoseLabel.setScale(2)
             youLoseLabel.position = CGPoint(x: 0, y: (self.size.height * 0.35))
             youLoseLabel.zPosition = 1
+            player1Wins()
+
             self.addChild(youWinLabel)
             self.addChild(youLoseLabel)
         } else if self.player2Time < self.player1Time && self.player2Time != 0 {
@@ -264,9 +336,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             youWinLabel.setScale(-2)
             youWinLabel.position = CGPoint(x: 0, y: (self.size.height * 0.35))
             youWinLabel.zPosition = 1
-            youLoseLabel.setScale(2)
+            youLoseLabel.setScale(-2)
             youLoseLabel.position = CGPoint(x: 0, y: (self.size.height * -0.35))
             youLoseLabel.zPosition = 1
+            player2Wins()
+
             self.addChild(youWinLabel)
             self.addChild(youLoseLabel)
         } else if self.player1Time == self.player2Time{
@@ -279,17 +353,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered        
-//        if player1Tapped == false {
-//            player1Timer += superDelta
-//        }
-//        
-//        if player2Tapped == false {
-//            player2Timer += superDelta
-//        }
+
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        
     }
 }
