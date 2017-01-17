@@ -21,7 +21,7 @@
 		4AF98C2C1E1B5DCC0067C784 /* ReflexDuelUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C2B1E1B5DCC0067C784 /* ReflexDuelUITests.swift */; };
 		4AF98C3A1E1C1CE20067C784 /* MainMenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */; };
 		4AF98C3C1E1C1D180067C784 /* MainMenuScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */; };
-		4AF98C4A1E280BDF0067C784 /* strikeParticle2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C491E280BDF0067C784 /* strikeParticle2.sks */; };
+		4AF98C4A1E280BDF0067C784 /* strikeParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 4AF98C491E280BDF0067C784 /* strikeParticle.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +62,7 @@
 		4AF98C2D1E1B5DCC0067C784 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4AF98C391E1C1CE20067C784 /* MainMenuScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuScene.swift; sourceTree = "<group>"; };
 		4AF98C3B1E1C1D180067C784 /* MainMenuScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenuScene.sks; sourceTree = "<group>"; };
-		4AF98C491E280BDF0067C784 /* strikeParticle2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = strikeParticle2.sks; sourceTree = "<group>"; };
+		4AF98C491E280BDF0067C784 /* strikeParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = strikeParticle.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +93,7 @@
 		4AF98BF91E1B5DCC0067C784 = {
 			isa = PBXGroup;
 			children = (
-				4AF98C491E280BDF0067C784 /* strikeParticle2.sks */,
+				4AF98C491E280BDF0067C784 /* strikeParticle.sks */,
 				4AF98C041E1B5DCC0067C784 /* ReflexDuel */,
 				4AF98C1F1E1B5DCC0067C784 /* ReflexDuelTests */,
 				4AF98C2A1E1B5DCC0067C784 /* ReflexDuelUITests */,
@@ -263,7 +263,7 @@
 				4AF98C081E1B5DCC0067C784 /* GameScene.sks in Resources */,
 				4AF98C131E1B5DCC0067C784 /* Assets.xcassets in Resources */,
 				4AF98C161E1B5DCC0067C784 /* LaunchScreen.storyboard in Resources */,
-				4AF98C4A1E280BDF0067C784 /* strikeParticle2.sks in Resources */,
+				4AF98C4A1E280BDF0067C784 /* strikeParticle.sks in Resources */,
 				4AF98C3C1E1C1D180067C784 /* MainMenuScene.sks in Resources */,
 				4AF98C0A1E1B5DCC0067C784 /* Actions.sks in Resources */,
 			);
