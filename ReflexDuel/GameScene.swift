@@ -98,6 +98,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let drawLabel2 = SKSpriteNode(imageNamed: "drawLabel")
     let tapLabel1 = SKSpriteNode(imageNamed: "tapLabel")
     let tapLabel2 = SKSpriteNode(imageNamed: "tapLabel")
+    let waitLabel1 = SKSpriteNode(imageNamed: "waitLabel")
+    let waitLabel2 = SKSpriteNode(imageNamed: "waitLabel")
+    let nowLabel1 = SKSpriteNode(imageNamed: "nowLabel")
+    let nowLabel2 = SKSpriteNode(imageNamed: "nowLabel")
+    let missLabel1 = SKSpriteNode(imageNamed: "missLabel")
+    let missLabel2 = SKSpriteNode(imageNamed: "missLabel")
     
     let white = SKSpriteNode(imageNamed: "White")
     let black = SKSpriteNode(imageNamed: "Black")
@@ -221,7 +227,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let textures = [s1, s2, s3, s4]
         let strikeAnimation = SKAction.animate(with: textures, timePerFrame: 0.05, resize: true, restore: false)
         self.player1.run(strikeAnimation)
-        
+        player1Miss()
+
     }
     //black false start animation
     func player2FalseStart(){
@@ -233,9 +240,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let textures = [s1, s2, s3, s4]
         let strikeAnimation = SKAction.animate(with: textures, timePerFrame: 0.05, resize: true, restore: false)
         self.player2.run(strikeAnimation)
+        player2Miss()
+    }
+    
+    func player1Miss(){
+        let m1 = SKAction.run {
+            self.missLabel1.setScale(2)
+            self.missLabel1.position = CGPoint(x: 0, y: (self.size.height * -0.30))
+            self.missLabel1.zPosition = 1
+            self.addChild(self.missLabel1)
+        }
+        let m2 = SKAction.wait(forDuration: 0.05)
+        let m3 = SKAction.run{
+            self.missLabel1.removeFromParent()
+        }
+        let seq = SKAction.sequence([m1, m2, m3])
+        
+        run(seq)
+    }
+    
+    func player2Miss(){
+        let m1 = SKAction.run {
+            self.missLabel2.setScale(-2)
+            self.missLabel2.position = CGPoint(x: 0, y: (self.size.height * 0.30))
+            self.missLabel2.zPosition = 1
+            self.addChild(self.missLabel2)
+        }
+        let m2 = SKAction.wait(forDuration: 0.05)
+        let m3 = SKAction.run{
+            self.missLabel2.removeFromParent()
+        }
+        let seq = SKAction.sequence([m1, m2, m3])
+        run(seq)
+    }
+    
+    func retry(){
+        let r1 = SKAction.wait(forDuration: 1.5)
+        let r2 = SKAction.run{
+            self.retryButton.state = .Active
+        }
+        let seq = SKAction.sequence([r1, r2])
+        run(seq)
         
     }
-
     
     override func didMove(to view: SKView) {
         
@@ -423,8 +470,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if self.gameState == .StrikeTempo{
                     
                     self.player1Tapped = true
+                    self.nowLabel1.removeFromParent()
+                    switch self.roundCounter {
+                        case 1: self.player1CanHit = self.isOnTop(of: self.strike1A, self.player1StrikeTempo)
+                        case 2: self.player1CanHit = self.isOnTop(of: self.strike2A, self.player1StrikeTempo)
+                        case 3: self.player1CanHit = self.isOnTop(of: self.strike3A, self.player1StrikeTempo)
+                        default: break
+                    }
                     
-                    if self.strikeEngaged == true && self.player1FalseStartCheck == false && self.player1CanHit == true {
+                    
+                    if self.strikeEngaged == true && self.player1FalseStartCheck == false && self.player1CanHit {
                         print("player1hit!")
                         self.player1Strike()
                         self.player1Hit = true
@@ -489,9 +544,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 if self.gameState == .StrikeTempo{
                     self.player2Tapped = true
+                    self.nowLabel2.removeFromParent()
+                    switch self.roundCounter {
+                    case 1: self.player2CanHit = self.isOnTop(of: self.strike1B, self.player2StrikeTempo)
+                    case 2: self.player2CanHit = self.isOnTop(of: self.strike2B, self.player2StrikeTempo)
+                    case 3: self.player2CanHit = self.isOnTop(of: self.strike3B, self.player2StrikeTempo)
+                    default: break
+                    }
                     
-                    
-                    if self.strikeEngaged == true  && self.player2FalseStartCheck == false && self.player1CanHit == true {
+                    if self.strikeEngaged  && !self.player2FalseStartCheck && self.player2CanHit {
                         self.player2Strike()
                         self.player2Hit = true
                         print("player2hit!")
@@ -499,7 +560,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     } else {
                         self.player2FalseStartCheck = true
                         self.player2FalseStart()
-                        self.StrikeTempoWinner()
                         print("player2 false start")
                         
                     }
@@ -635,7 +695,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if self.player1FalseStartCheck == true && self.player2FalseStartCheck == true && self.gameState == .Fight {
             self.gameState = .GameOver
             self.fightLabel.removeFromParent()
-            retryButton.state = .Active
+            retry()
         } else if self.player1FalseStartCheck == false && self.player2FalseStartCheck == false && self.gameState == .Fight {
             if self.player1Time < self.player2Time && self.player1Time != 0 {
                 if self.player2Time - self.player1Time > 0.2{
@@ -643,7 +703,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     Player1Wins()
                 } else {
                     gameState = .BeginTempo
-//                    StrikeTempoMode()
                 }
                 
             } else if self.player2Time < self.player1Time && self.player2Time != 0 {
@@ -652,7 +711,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     Player2Wins()
                 } else {
                     gameState = .BeginTempo
-//                    StrikeTempoMode()
                     
                 }
                 
@@ -676,6 +734,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.player2StrikeTempo.isHidden = false
         self.player1StrikeEmitter?.isHidden = false
         self.player2StrikeEmitter?.isHidden = false
+        
+        waitLabel1.setScale(-2)
+        waitLabel1.position = CGPoint(x: 0, y: (self.size.height * 0.30))
+        waitLabel1.zPosition = 1
+        waitLabel2.setScale(2)
+        waitLabel2.position = CGPoint(x: 0, y: (self.size.height * -0.30))
+        waitLabel2.zPosition = 1
+        self.addChild(waitLabel1)
+        self.addChild(waitLabel2)
+        
         // start tempo actions ...
         let moveLeft = SKAction.moveTo(x: -340, duration: 0.5)
         let moveRight = SKAction.moveTo(x: 340, duration: 0.5)
@@ -714,7 +782,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         print("strike tempo enabled")
         let maxRounds = 3
         roundCounter += 1
-        if roundCounter < maxRounds {
+        print("Round counter: ", roundCounter)
+        if roundCounter <= maxRounds {
             if self.roundCounter == 1 {
                 print("round1")
                 self.strike1A.position.x = player1StrikeTempo.position.x
@@ -725,6 +794,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.strike1B.isHidden = false
                 
                 self.strikeEngaged = true
+                
+                waitLabel1.removeFromParent()
+                waitLabel2.removeFromParent()
+                nowLabel1.setScale(-2)
+                nowLabel1.position = CGPoint(x: 0, y: (self.size.height * 0.30))
+                nowLabel1.zPosition = 1
+                nowLabel2.setScale(2)
+                nowLabel2.position = CGPoint(x: 0, y: (self.size.height * -0.30))
+                nowLabel2.zPosition = 1
+                self.addChild(nowLabel1)
+                self.addChild(nowLabel2)
             } else if self.roundCounter == 2 {
                 self.strike2A.position.x = player1StrikeTempo.position.x
                 self.strike2A.isHidden = false
@@ -765,8 +845,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func StrikeTempoWinner() {
+        
+        print("-- called strike tempo winner")
+        print("*****************************")
+        
         if player1Tapped ==  true && player2Tapped == true {
+            print("-- both players tapped")
             if player1FalseStartCheck == true && player2FalseStartCheck == true {
+                print("-- both miss")
                 player1Strike()
                 player2Strike()
                 player1Tapped = false
@@ -775,18 +861,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 player2FalseStartCheck = false
                 
             } else {
-                if player1FalseStartCheck == true && player2FalseStartCheck == false && player2Hit == true {
-                    Player2Wins()
-                }
+                print("-- one player wins")
                 if player2FalseStartCheck == true && player1FalseStartCheck == false && player1Hit == true {
+                    print("---- player 1 wins")
                     Player1Wins()
+                    
                 }
+                else if player1FalseStartCheck == true && player2FalseStartCheck == false && player2Hit == true {
+                    print("---- player 2 wins")
+                    Player2Wins()
+                    
+                }
+                
                 if roundCounter == 1 && player1Hit == true && player2Hit == true {
                     strike1A.removeFromParent()
                     strike1B.removeFromParent()
                     player1Tapped = false
                     player2Tapped = false
                     strikeEngaged = false
+                    player1Hit = false
+                    player2Hit = false
                     StrikeTempoMode()
                 }
                 if roundCounter == 2 && player1Hit == true && player2Hit == true {
@@ -795,6 +889,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     player1Tapped = false
                     player2Tapped = false
                     strikeEngaged = false
+                    player1Hit = false
+                    player2Hit = false
                     StrikeTempoMode()
                 }
                 if roundCounter == 3 && player1Hit == true && player2Hit == true {
@@ -803,6 +899,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     player1Tapped = false
                     player2Tapped = false
                     strikeEngaged = false
+                    player1Hit = false
+                    player2Hit = false
                     StrikeTempoMode()
                 }
 
@@ -845,7 +943,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.gameState = .GameOver
             self.tapLabel1.removeFromParent()
             self.tapLabel2.removeFromParent()
-            self.retryButton.state = .Active
+            retry()
             print(player1TapCount)
             print(player2TapCount)
             if allOutModeEnabled == true {
@@ -877,7 +975,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(youWinLabel)
         self.addChild(youLoseLabel)
         gameState = .GameOver
-        retryButton.state = .Active
+        retry()
         gameOver = true
         if allOutModeEnabled == true {
             Player1TapCount()
@@ -898,7 +996,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(youWinLabel)
         self.addChild(youLoseLabel)
         gameState = .GameOver
-        retryButton.state = .Active
+        retry()
         gameOver = true
         if allOutModeEnabled == true {
             Player1TapCount()
@@ -973,36 +1071,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
         case .StrikeTempo:
             // tempo()
-            if isOnTop(of: self.strike1A, self.player1StrikeTempo) {
-                self.player1CanHit = true
-            } else {
-                self.player1CanHit = false
-            }
-            if isOnTop(of: self.strike1B, self.player2StrikeTempo) {
-                self.player2CanHit = true
-            } else {
-                self.player2CanHit = false
-            }
-            if isOnTop(of: self.strike2A, self.player1StrikeTempo) {
-                self.player1CanHit = true
-            } else {
-                self.player1CanHit = false
-            }
-            if isOnTop(of: self.strike2B, self.player2StrikeTempo) {
-                self.player2CanHit = true
-            } else {
-                self.player2CanHit = false
-            }
-            if isOnTop(of: self.strike3A, self.player1StrikeTempo) {
-                self.player1CanHit = true
-            } else {
-                self.player1CanHit = false
-            }
-            if isOnTop(of: self.strike3B, self.player2StrikeTempo) {
-                self.player2CanHit = true
-            } else {
-                self.player2CanHit = false
-            }
+//            if isOnTop(of: self.strike1A, self.player1StrikeTempo) {
+//                self.player1CanHit = true
+//            } else {
+//                self.player1CanHit = false
+//            }
+//            if isOnTop(of: self.strike1B, self.player2StrikeTempo) {
+//                self.player2CanHit = true
+//            } else {
+//                self.player2CanHit = false
+//            }
+//            if isOnTop(of: self.strike2A, self.player1StrikeTempo) {
+//                self.player1CanHit = true
+//            } else {
+//                self.player1CanHit = false
+//            }
+//            if isOnTop(of: self.strike2B, self.player2StrikeTempo) {
+//                self.player2CanHit = true
+//            } else {
+//                self.player2CanHit = false
+//            }
+//            if isOnTop(of: self.strike3A, self.player1StrikeTempo) {
+//                self.player1CanHit = true
+//            } else {
+//                self.player1CanHit = false
+//            }
+//            if isOnTop(of: self.strike3B, self.player2StrikeTempo) {
+//                self.player2CanHit = true
+//            } else {
+//                self.player2CanHit = false
+//            }
             break
             
         }
