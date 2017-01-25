@@ -65,6 +65,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var player2Hit: Bool = false
     var player1Crit: Bool = false
     var player2Crit: Bool = false
+    var hasMissed1: Bool = false
+    var hasMissed2: Bool = false
+
     
     var roundCounter: Int = 0
     var randStrike: Int = 0
@@ -104,6 +107,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let nowLabel2 = SKSpriteNode(imageNamed: "nowLabel")
     let missLabel1 = SKSpriteNode(imageNamed: "missLabel")
     let missLabel2 = SKSpriteNode(imageNamed: "missLabel")
+    let tapOnFightLabel1 = SKSpriteNode(imageNamed: "tapOnFightLabel")
+    let tapOnFightLabel2 = SKSpriteNode(imageNamed: "tapOnFightLabel")
+
     
     let white = SKSpriteNode(imageNamed: "White")
     let black = SKSpriteNode(imageNamed: "Black")
@@ -244,34 +250,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func player1Miss(){
-        let m1 = SKAction.run {
-            self.missLabel1.setScale(2)
-            self.missLabel1.position = CGPoint(x: 0, y: (self.size.height * -0.30))
-            self.missLabel1.zPosition = 1
-            self.addChild(self.missLabel1)
+        if hasMissed1 == true{
+            let m1 = SKAction.run {
+                self.missLabel1.setScale(2)
+                self.missLabel1.position = CGPoint(x: 0, y: (self.size.height * -0.30))
+                self.missLabel1.zPosition = 1
+                self.addChild(self.missLabel1)
+            }
+            let m2 = SKAction.wait(forDuration: 0.1)
+            let m3 = SKAction.run{
+                self.missLabel1.removeFromParent()
+                self.hasMissed1 = false
+            }
+            let seq = SKAction.sequence([m1, m2, m3])
+            
+            run(seq)
         }
-        let m2 = SKAction.wait(forDuration: 0.05)
-        let m3 = SKAction.run{
-            self.missLabel1.removeFromParent()
-        }
-        let seq = SKAction.sequence([m1, m2, m3])
-        
-        run(seq)
+       
     }
     
     func player2Miss(){
-        let m1 = SKAction.run {
-            self.missLabel2.setScale(-2)
-            self.missLabel2.position = CGPoint(x: 0, y: (self.size.height * 0.30))
-            self.missLabel2.zPosition = 1
-            self.addChild(self.missLabel2)
+        if hasMissed2 == true {
+            let m1 = SKAction.run {
+                self.missLabel2.setScale(-2)
+                self.missLabel2.position = CGPoint(x: 0, y: (self.size.height * 0.30))
+                self.missLabel2.zPosition = 1
+                self.addChild(self.missLabel2)
+            }
+            let m2 = SKAction.wait(forDuration: 0.1)
+            let m3 = SKAction.run{
+                self.missLabel2.removeFromParent()
+                self.hasMissed2 = false
+                
+            }
+            let seq = SKAction.sequence([m1, m2, m3])
+            run(seq)
         }
-        let m2 = SKAction.wait(forDuration: 0.05)
-        let m3 = SKAction.run{
-            self.missLabel2.removeFromParent()
-        }
-        let seq = SKAction.sequence([m1, m2, m3])
-        run(seq)
+
     }
     
     func retry(){
@@ -440,6 +455,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         tapLabel2.isHidden = true
         self.addChild(tapLabel2)
         
+        tapOnFightLabel1.setScale(2)
+        tapOnFightLabel1.position = CGPoint(x: 0, y: (self.size.height * -0.40))
+        tapOnFightLabel1.zPosition = 2
+        tapOnFightLabel1.isHidden = true
+        self.addChild(tapOnFightLabel1)
+        
+        tapOnFightLabel2.setScale(-2)
+        tapOnFightLabel2.position = CGPoint(x: 0, y: (self.size.height * 0.40))
+        tapOnFightLabel2.zPosition = 2
+        tapOnFightLabel2.isHidden = true
+        self.addChild(tapOnFightLabel2)
+        
         readyButton1.selectedHandler = {
             self.readyButton1Pressed = true
             self.readyButton1.isHidden = true
@@ -468,7 +495,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
                 if self.gameState == .StrikeTempo{
-                    
                     self.player1Tapped = true
                     self.nowLabel1.removeFromParent()
                     switch self.roundCounter {
@@ -643,7 +669,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
         //after ready buttons are pressed, gameState Strike, fight countdown begins with random interval times
     func fightCountdown() {
-        
+        self.tapOnFightLabel1.isHidden = false
+        self.tapOnFightLabel2.isHidden = false
         print("Both Players Ready")
         
         let waitTime1 = randomTime(range: 1) + 1
@@ -662,13 +689,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.gameState = .Strike
             self.player1TapArea.state = .Active
             self.player2TapArea.state = .Active
+            SKAction.playSoundFileNamed("Yoooo", waitForCompletion: false)
+           
         }
         
         let to = SKAction.run {
             print("to")
             self.prepareLabel.removeFromParent()
             self.toLabel.setScale(2)
-
+            self.tapOnFightLabel1.isHidden = true
+            self.tapOnFightLabel2.isHidden = true
             self.addChild(self.toLabel)
         }
         
@@ -679,6 +709,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.addChild(self.fightLabel)
             self.gameState = .Fight
             self.fightStart = true
+            SKAction.playSoundFileNamed("bottle", waitForCompletion: false)
 
             print("Timers Enabled")
         }
@@ -692,7 +723,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             Player2Wins()
         } else if self.player1FalseStartCheck == false && self.player2FalseStartCheck == true && self.gameState == .Fight {
             Player1Wins()
-        } else if self.player1FalseStartCheck == true && self.player2FalseStartCheck == true && self.gameState == .Fight {
+        } else if self.player1FalseStartCheck == true && self.player2FalseStartCheck == true {
             self.gameState = .GameOver
             self.fightLabel.removeFromParent()
             retry()
@@ -763,7 +794,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func tempoActionForge() {
         print("strike tempo timer")
-        let wait = SKAction.wait(forDuration: Double(self.randomTime(range: 6) + 1))
+        let wait = SKAction.wait(forDuration: Double(self.randomTime(range: 2) + 1))
         let done = SKAction.run {
             self.StrikeTempoMode()
         }
@@ -881,7 +912,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     strikeEngaged = false
                     player1Hit = false
                     player2Hit = false
-                    StrikeTempoMode()
+                    tempoActionForge()
                 }
                 if roundCounter == 2 && player1Hit == true && player2Hit == true {
                     strike2A.removeFromParent()
@@ -891,7 +922,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     strikeEngaged = false
                     player1Hit = false
                     player2Hit = false
-                    StrikeTempoMode()
+                    tempoActionForge()
                 }
                 if roundCounter == 3 && player1Hit == true && player2Hit == true {
                     strike3A.removeFromParent()
